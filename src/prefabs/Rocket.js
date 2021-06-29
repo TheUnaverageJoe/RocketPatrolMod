@@ -9,6 +9,31 @@ class Rocket extends Phaser.GameObjects.Sprite {
     }
 
     update() {
+
+        //Cant load a find texture 'mine' from here
+        //if(Phaser.Input.Keyboard.JustDown(keyG) && this.isFiring) {
+            //console.log(mine);
+           // mine = new Mine(this, this.x, this.y, 'mine', 0).setOrigin(0, 0);
+        //}
+
+        //Mouse Input
+        var pointer = game.input.activePointer;
+
+        if(!this.isFiring) {
+            if(pointer.worldX < this.x && this.x >= borderUISize + this.width) {
+                this.x -= this.moveSpeed;
+            } else if(pointer.worldX > this.x && this.x <= game.config.width -
+                      borderUISize - this.width){
+                this.x += this.moveSpeed;
+            }
+        }
+
+        if(pointer.leftButtonDown() && !this.isFiring){
+            this.isFiring = true;
+            this.sfxRocket.play();
+        }
+
+        //keyboard input
         if(!this.isFiring) {
             if(keyLEFT.isDown && this.x >= borderUISize + this.width){
                 this.x -= this.moveSpeed;
@@ -23,6 +48,7 @@ class Rocket extends Phaser.GameObjects.Sprite {
             this.sfxRocket.play();
         }
 
+        // Firing mechanics
         if(this.isFiring &&  this.y >= borderUISize *3 + borderPadding) {
             this.y -= this.moveSpeed;
         }
